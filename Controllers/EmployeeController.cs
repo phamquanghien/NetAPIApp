@@ -12,55 +12,55 @@ namespace NetAPIApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PersonController(ApplicationDbContext context)
+        public EmployeeController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Person
-        [HttpGet("/get-all-person")]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
+        // GET: api/Employee
+        [HttpGet("/get-all-employee")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee()
         {
-          if (_context.Person == null)
+          if (_context.Employee == null)
           {
               return NotFound();
           }
-            return await _context.Person.ToListAsync();
+            return await _context.Employee.ToListAsync();
         }
 
-        // GET: api/Person/5
-        [HttpGet("/get-person-by-id/{id}")]
-        public async Task<ActionResult<Person>> GetPerson(string id)
+        // GET: api/Employee/5
+        [HttpGet("/get-employee-by-id/{id}")]
+        public async Task<ActionResult<Employee>> GetEmployee(string id)
         {
-          if (_context.Person == null)
+          if (_context.Employee == null)
           {
               return NotFound();
           }
-            var person = await _context.Person.FindAsync(id);
+            var employee = await _context.Employee.FindAsync(id);
 
-            if (person == null)
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return person;
+            return employee;
         }
 
-        // PUT: api/Person/5
+        // PUT: api/Employee/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("/update-person/{id}")]
-        public async Task<IActionResult> PutPerson(string id, Person person)
+        [HttpPut("/update-employee/{id}")]
+        public async Task<IActionResult> PutEmployee(string id, Employee employee)
         {
-            if (id != person.PersonID)
+            if (id != employee.PersonID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(person).State = EntityState.Modified;
+            _context.Entry(employee).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace NetAPIApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PersonExists(id))
+                if (!EmployeeExists(id))
                 {
                     return NotFound();
                 }
@@ -81,23 +81,23 @@ namespace NetAPIApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Person
+        // POST: api/Employee
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/create-person")]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        [HttpPost("/create-employee")]
+        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
         {
-          if (_context.Person == null)
+          if (_context.Employee == null)
           {
-              return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
+              return Problem("Entity set 'ApplicationDbContext.Employee'  is null.");
           }
-            _context.Person.Add(person);
+            _context.Employee.Add(employee);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (PersonExists(person.PersonID))
+                if (EmployeeExists(employee.PersonID))
                 {
                     return Conflict();
                 }
@@ -107,32 +107,32 @@ namespace NetAPIApp.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPerson", new { id = person.PersonID }, person);
+            return CreatedAtAction("GetEmployee", new { id = employee.PersonID }, employee);
         }
 
-        // DELETE: api/Person/5
-        [HttpDelete("/delete-person/{id}")]
-        public async Task<IActionResult> DeletePerson(string id)
+        // DELETE: api/Employee/5
+        [HttpDelete("/delete-employee/{id}")]
+        public async Task<IActionResult> DeleteEmployee(string id)
         {
-            if (_context.Person == null)
+            if (_context.Employee == null)
             {
                 return NotFound();
             }
-            var person = await _context.Person.FindAsync(id);
-            if (person == null)
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            _context.Person.Remove(person);
+            _context.Employee.Remove(employee);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PersonExists(string id)
+        private bool EmployeeExists(string id)
         {
-            return (_context.Person?.Any(e => e.PersonID == id)).GetValueOrDefault();
+            return (_context.Employee?.Any(e => e.PersonID == id)).GetValueOrDefault();
         }
     }
 }
